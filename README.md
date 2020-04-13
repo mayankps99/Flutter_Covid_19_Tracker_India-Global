@@ -1,16 +1,11 @@
 # covid19_tracker_demo
 
-A new Flutter project.
+A Covid-19 Tracker built using Flutter. It shows stats of Indian states and Global countries. There is also a news section which shows Indian & Global news related to health & care.
 
-## Getting Started
+## Screenshots
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="screenshot/Screenshot1.png" width=280px height=450px>
+<img src="screenshot/Screenshot2.png" width=280px height=450px>
+<img src="screenshot/Screenshot3.png" width=280px height=450px>
+<img src="screenshot/Screenshot4.png" width=280px height=450px>
+<img src="screenshot/Screenshot5.png" width=280px height=450px>

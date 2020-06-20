@@ -1,9 +1,11 @@
 import 'package:covid19_tracker_demo/util/card.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'util/resource.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'Animation/FadeAnimation.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 
 class GlobalScreen extends StatefulWidget {
   @override
@@ -34,12 +36,11 @@ class _GlobalScreenState extends State<GlobalScreen> {
 
   List<States> stateList = List<States>();
   List<States> temp = List();
-  int count=1;
+  int count = 1;
   void getDetails() async {
     var res = await http
         .get("https://api.coronatracker.com/v3/stats/worldometer/topCountry");
     var resBody = json.decode(res.body);
-    
 
     for (var s in resBody) {
       States temp1 = States(
@@ -75,235 +76,320 @@ class _GlobalScreenState extends State<GlobalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context,allowFontScaling: true);
     return Scaffold(
-        backgroundColor: Color(0xFFFFFFFF),
+        backgroundColor: Color(0xff2C2B4B),
         body: SingleChildScrollView(
           child: Column(children: <Widget>[
             SizedBox(
-              height: 20,
+              height: ScreenUtil().setHeight(20*2.36),
             ),
-            GlobalSituationCard(
-              cardTitle: 'Confirmed CASES',
-              caseTitle: 'Confirmed',
-              currentData: totalConfirmed,
-              newData: totalNewCases,
-              color: Colors.red,
-              cardColor: Colors.red,
-            ),
-            SizedBox(height: 10),
-            FadeAnimation(1, GlobalSituationCard(
-              cardTitle: 'Active CASES',
-              caseTitle: 'Active',
-              currentData: totalActiveCases,
-              newData: null,
-              color: Colors.blue,
-              cardColor: Colors.blue,
-            ),),
-            SizedBox(
-              height: 10,
-            ),
-            FadeAnimation(1.2,GlobalSituationCard(
-              cardTitle: 'Recovered CASES',
-              caseTitle: 'Recovered',
-              currentData: totalRecovered,
-              newData: null,
-              color: Colors.green,
-            ),),
-            SizedBox(
-              height: 10,
-            ),
-            FadeAnimation(1.4,GlobalSituationCard(
-              cardTitle: 'Death CASES',
-              caseTitle: 'Deaths',
-              currentData: totalDeaths,
-              newData: totalNewDeaths,
-              color: Colors.grey,
-              cardColor: Colors.grey,
-            ),),
-            SizedBox(
-              height: 20,
-            ),
-            FadeAnimation(1.8,Center(
-              child: Text(
-                "Countries",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),
-            ),),
-            SizedBox(height: 5,),
-            Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(50),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.18),
-                        blurRadius: 20,
-                        spreadRadius: 3.5,
-                        offset: Offset(0, 13)),
-                  ], 
+            Row(
+              children: <Widget>[
+                FadeAnimation(1,
+                GlobalSituationCard(
+                  cardTitle: 'Confirmed',
+                  currentData: totalConfirmed,
+                  newData: totalNewCases,
+                  color: Colors.red,
+                  cardColor: Colors.red,
                 ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(10),
-                    hintText: 'Enter Country',
-                    hintStyle: TextStyle(fontSize: 18),
+                ),
+                FadeAnimation(
+                  1.2,
+                  GlobalSituationCard(
+                    cardTitle: 'Active',
+                    currentData: totalActiveCases,
+                    newData: null,
+                    color: Colors.blue,
+                    cardColor: Colors.blue,
                   ),
-                  onChanged:(string){
-                    setState(() {
-                      stateList = temp.where((s)=>(s.name.toLowerCase().contains(string.toLowerCase()))).toList();
-                    });
-                  } ,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: ScreenUtil().setHeight(10*2.36),
+            ),
+            Row(
+              children: <Widget>[
+                FadeAnimation(
+                  1.4,
+                  GlobalSituationCard(
+                    cardTitle: 'Recovered',
+                    currentData: totalRecovered,
+                    newData: null,
+                    color: Colors.green,
+                  ),
+                ),
+                FadeAnimation(
+                  1.6,
+                  GlobalSituationCard(
+                    cardTitle: 'Death',
+                    currentData: totalDeaths,
+                    newData: totalNewDeaths,
+                    color: Colors.grey,
+                    cardColor: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: ScreenUtil().setHeight(20*2.36),
+            ),
+            FadeAnimation(
+              1.8,
+              Center(
+                child: Text(
+                  "Countries",
+                  style: TextStyle(
+                    fontFamily: fontFamily,
+                    fontSize: ScreenUtil().setHeight(28*2.36),
+                    fontWeight: FontWeight.w600,
+                    color: whiteColor
+                  )
                 ),
               ),
-            SizedBox(height: 10),
-            FadeAnimation(2,Container(
-              padding: EdgeInsets.only(bottom: 10),
-              margin: EdgeInsets.all(5),
-              height: screenHeight(context) / 1.8,
-              child: ListView.builder(
-                padding: EdgeInsets.all(0),
-                itemCount: stateList.length,
-                itemBuilder: (context, index) {
-                  if (stateList[index].name ==
-                      'Saint Vincent and the Grenadines') {
-                    stateList[index].name = 'Saint Vincent';
-                  }
-                  return Card(
-                    color: Color(0xFFFF8367),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.all(15),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 5),
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.07),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: RichText(
-                                  text: TextSpan(
-                                      text: stateList[index].name,
-                                      style: GoogleFonts.cabin(
-                                          textStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20))),
-                                ),
-                              ),
-                              Spacer(),
-                              Container(
-                                margin: EdgeInsets.all(15),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 17),
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.07),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: RichText(
-                                  text: TextSpan(
-                                      text: stateList[index].id.toString(),
-                                      style: GoogleFonts.cabin(
-                                          textStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20))),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Row(
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    Text(
-                                      stateList[index].confirmed,
-                                      style: GoogleFonts.cabin(
-                                          textStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20)),
-                                    ),
-                                    Text(
-                                      "Confirmed",
-                                      style: GoogleFonts.cabin(
-                                          textStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20)),
-                                    ),
-                                  ],
-                                ),
-                                Spacer(),
-                                Column(
-                                  children: <Widget>[
-                                    Text(
-                                      stateList[index].recovered,
-                                      style: GoogleFonts.cabin(
-                                          textStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20)),
-                                    ),
-                                    Text(
-                                      "Recovered",
-                                      style: GoogleFonts.cabin(
-                                          textStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20)),
-                                    ),
-                                  ],
-                                ),
-                                Spacer(),
-                                Column(
-                                  children: <Widget>[
-                                    Text(
-                                      stateList[index].deaths,
-                                      style: GoogleFonts.cabin(
-                                          textStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20)),
-                                    ),
-                                    Text(
-                                      "Deaths",
-                                      style: GoogleFonts.cabin(
-                                          textStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20)),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                  // }
+            ),
+            SizedBox(
+              height: ScreenUtil().setHeight(5*2.36),
+            ),
+            Container(
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(50),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.18),
+                      blurRadius: 20,
+                      spreadRadius: 3.5,
+                      offset: Offset(0, 13)),
+                ],
+              ),
+              child: TextField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(10),
+                  hintText: 'Enter Country',
+                  hintStyle: TextStyle(fontSize: ScreenUtil().setSp(18*2.36),fontFamily: fontFamily),
+                ),
+                onChanged: (string) {
+                  setState(() {
+                    stateList = temp
+                        .where((s) => (s.name
+                            .toLowerCase()
+                            .contains(string.toLowerCase())))
+                        .toList();
+                  });
                 },
               ),
-            ),),
+            ),
+            SizedBox(height: ScreenUtil().setHeight(10*2.36)),
+            Container(
+                padding: const EdgeInsets.all(2.0),
+                color: Color(0xff1e1e30),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 120*2.36.w,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Color(0xff1e1e30),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Country',
+                          style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: 18*2.36.sp,
+                            color: Color(0xff007BFE),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 105*2.36.w,
+                      margin: EdgeInsets.symmetric(horizontal: 2),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Color(0xff1e1e30),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Confirmed',
+                          style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: 17.5*2.36.sp,
+                            color: Color(0xffFE073A),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 110*2.36.w,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Color(0xff1e1e30),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Recovered',
+                          style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: 18*2.36.sp,
+                            color: Color(0xff28A645),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 85*2.36.w,
+                      margin: EdgeInsets.only(left: 2),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Color(0xff1e1e30),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Deaths',
+                          style: TextStyle(
+                            fontFamily: fontFamily,
+                            fontSize: 18*2.36.sp,
+                            color: Color(0xff666f77),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            FadeAnimation(
+              2,
+              Container(
+                padding: EdgeInsets.only(bottom: 10),
+                
+                height: screenHeight(context) / 1.8,
+                child: ListView.builder(
+                  padding: EdgeInsets.all(0),
+                  itemCount: stateList.length,
+                  itemBuilder: (context, index) {
+                    if (stateList[index].name ==
+                        'Saint Vincent and the Grenadines') {
+                      stateList[index].name = 'Saint Vincent';
+                    }
+                    return Container(
+                        margin: const EdgeInsets.all(2.0),
+                        color: Color(0xff1c1c2b),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: 122*2.36.w,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Color(0xff1c1c2b),
+                              ),
+                              child: Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    stateList[index].name,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontFamily: fontFamily,
+                                      fontSize: 18*2.36.sp,
+                                      color: Color(0xff007BFE),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: 105*2.36.w,
+                              margin: EdgeInsets.symmetric(horizontal: 2),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Color(0xff1c1c2b),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  stateList[index].confirmed,
+                                  style: TextStyle(
+                                    fontFamily: fontFamily,
+                                    fontSize: 18*2.36.sp,
+                                    color: Color(0xffFE073A),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 110*2.36.w,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Color(0xff1c1c2b),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  stateList[index].recovered,
+                                  style: TextStyle(
+                                    fontFamily: fontFamily,
+                                    fontSize: 18*2.36.sp,
+                                    color: Color(0xff28A645),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 85*2.36.w,
+                              margin: EdgeInsets.only(left: 2),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Color(0xff1c1c2b),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  stateList[index].deaths,
+                                  style: TextStyle(
+                                    fontFamily: fontFamily,
+                                    fontSize: 18*2.36.sp,
+                                    color: Color(0xff666f77),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    
+                  },
+                ),
+              ),
+            ),
           ]),
         ));
   }
@@ -312,5 +398,5 @@ class _GlobalScreenState extends State<GlobalScreen> {
 class States {
   int id;
   String name, confirmed, recovered, deaths;
-  States(this.id,this.name, this.confirmed, this.recovered, this.deaths);
+  States(this.id, this.name, this.confirmed, this.recovered, this.deaths);
 }

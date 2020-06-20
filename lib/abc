@@ -139,3 +139,5 @@ Container(
                               ],
                             ),
                           ),
+
+                          Color(0xff2C2B4B)

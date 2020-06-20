@@ -4,6 +4,8 @@ A Covid-19 Tracker built using Flutter. It shows stats of Indian states and Glob
 
 ## Screenshots
 
+
+<img src="screenshot/Screenshot6.png" width=280px height=500px>
 <img src="screenshot/Screenshot1.png" width=280px height=500px>
 <img src="screenshot/Screenshot2.png" width=280px height=500px>
 <img src="screenshot/Screenshot3.png" width=280px height=500px>

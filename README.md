@@ -1,4 +1,4 @@
-# covid19_tracker_demo
+# Covid_19_Tracker
 
 A Covid-19 Tracker built using Flutter. It shows stats of Indian states and Global countries. There is also a news section which shows Indian & Global news related to health & care.
 
